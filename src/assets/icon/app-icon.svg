@@ -1,0 +1,55 @@
+<svg viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradiente para fondo -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6B46C1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9333EA;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Gradiente para el impostor -->
+    <linearGradient id="impostorGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EE5A52;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Gradiente para jugadores normales -->
+    <linearGradient id="playerGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4338CA;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Fondo redondeado -->
+  <rect width="192" height="192" rx="48" fill="url(#bgGradient)"/>
+  
+  <!-- Efecto de brillo sutil en la esquina superior izquierda -->
+  <ellipse cx="60" cy="60" rx="45" ry="45" fill="white" opacity="0.1"/>
+  
+  <!-- Jugador 1 (Normal) - Arriba izquierda -->
+  <circle cx="50" cy="54" r="18" fill="url(#playerGradient)"/>
+  <path d="M 28 85 Q 28 75 38 75 Q 48 75 48 85 L 48 100 Q 48 108 40 108 L 36 108 Q 28 108 28 100 Z" fill="url(#playerGradient)"/>
+  
+  <!-- Jugador 2 (Normal) - Arriba derecha -->
+  <circle cx="142" cy="54" r="18" fill="url(#playerGradient)"/>
+  <path d="M 120 85 Q 120 75 130 75 Q 140 75 140 85 L 140 100 Q 140 108 132 108 L 128 108 Q 120 108 120 100 Z" fill="url(#playerGradient)"/>
+  
+  <!-- Jugador 3 (EL IMPOSTOR) - Centro abajo - Destacado con colores llamativos -->
+  <circle cx="96" cy="110" r="22" fill="url(#impostorGradient)"/>
+  
+  <!-- Aura de alerta alrededor del impostor -->
+  <circle cx="96" cy="110" r="28" fill="none" stroke="#FF6B6B" stroke-width="2" opacity="0.6"/>
+  <circle cx="96" cy="110" r="32" fill="none" stroke="#FF6B6B" stroke-width="1" opacity="0.3" stroke-dasharray="4 4"/>
+  
+  <!-- Cuerpo del impostor (más grande para destacar) -->
+  <path d="M 70 145 Q 70 132 82 132 Q 96 132 96 145 L 96 162 Q 96 171 88 171 L 82 171 Q 70 171 70 162 Z" fill="url(#impostorGradient)"/>
+  
+  <!-- Signo de interrogación sutil en el impostor (sugerencia de misterio) -->
+  <text x="96" y="125" font-size="18" font-weight="bold" text-anchor="middle" fill="white" opacity="0.3">?</text>
+  
+  <!-- Brillo especular en la cabeza del impostor -->
+  <ellipse cx="85" cy="102" rx="8" ry="10" fill="white" opacity="0.2"/>
+  
+  <!-- Línea decorativa que conecta los jugadores normales con el impostor -->
+  <line x1="50" y1="75" x2="70" y2="105" stroke="#FF6B6B" stroke-width="1.5" opacity="0.3"/>
+  <line x1="142" y1="75" x2="120" y2="105" stroke="#FF6B6B" stroke-width="1.5" opacity="0.3"/>
+</svg>

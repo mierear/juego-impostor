@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-toolbar class="header-toolbar">
+    <ion-buttons slot="start">
+      <ion-button (click)="goHome()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <span class="timer-display">{{ gameTime }}</span>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="game-container" *ngIf="room && currentPlayer">
+  <div class="game-content">
+    <!-- Player Header -->
+    <div class="player-header">
+      <h2 class="player-name">{{ playerInfo?.name }}</h2>
+      <p class="player-role" [class.impostor]="isImpostor">
+        {{ isImpostor ? 'IMPOSTOR' : 'JUGADOR' }}
+      </p>
+    </div>
+
+    <!-- Character Display Section -->
+    <div class="character-section">
+      <!-- For Regular Players: Show Character -->
+      <div class="character-display" *ngIf="!isImpostor && currentPlayer.character">
+        <div class="character-container">
+          <div class="character-emoji">{{ currentPlayer.character.image }}</div>
+          <h1 class="character-name">{{ currentPlayer.character.name }}</h1>
+        </div>
+      </div>
+
+      <!-- For Impostor: Show Badge -->
+      <div class="impostor-display" *ngIf="isImpostor">
+        <div class="impostor-badge">🕵️</div>
+        <h1 class="impostor-title">IMPOSTOR</h1>
+        <p class="impostor-message">Descubre cuál es el personaje escuchando las pistas</p>
+      </div>
+    </div>
+
+    <!-- Player Actions -->
+    <div class="actions-section">
+      <!-- Swap Character Button (Regular Players Only) -->
+      <div *ngIf="!isImpostor && canSwapCharacter()" class="swap-action">
+        <ion-button
+          expand="block"
+          (click)="swapCharacter()"
+          [disabled]="isLoading"
+          class="swap-btn"
+        >
+          <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+          <span *ngIf="!isLoading">Cambiar Personaje</span>
+        </ion-button>
+        <p class="swaps-info">Cambios restantes: {{ swapsRemaining }}/3</p>
+      </div>
+
+      <!-- Voting Button -->
+      <ion-button expand="block" (click)="goToVoting()" class="voting-btn">
+        <ion-icon name="hand-left" slot="start"></ion-icon>
+        Ir a Votación
+      </ion-button>
+
+      <!-- Error Message -->
+      <ion-text color="danger" *ngIf="error">
+        <p class="error-message">{{ error }}</p>
+      </ion-text>
+    </div>
+  </div>
+</ion-content>

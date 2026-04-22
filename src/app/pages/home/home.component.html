@@ -1,0 +1,195 @@
+<ion-content class="home-container" *ngIf="!showCreateForm && !showJoinForm">
+  <!-- Logo y Header -->
+  <div class="header-section">
+    <div class="logo-container">
+      <img src="assets/icon/logo-impostor.svg" alt="Logo Impostor" class="logo-image" />
+    </div>
+
+    <h1 class="title">IMPOSTOR</h1>
+    <p class="subtitle">¿QUIÉN ES EL IMPOSTOR?</p>
+  </div>
+
+  <!-- Botones principales -->
+  <div class="buttons-section">
+    <ion-button
+      expand="block"
+      color="primary"
+      size="large"
+      (click)="showCreateSala()"
+      class="create-btn"
+    >
+      <span class="plus-icon">+</span>
+      Crear Sala
+    </ion-button>
+
+    <ion-button
+      expand="block"
+      fill="outline"
+      color="primary"
+      size="large"
+      (click)="showJoinSala()"
+      class="join-btn"
+    >
+      <ion-icon name="people" slot="start"></ion-icon>
+      Unirse a Sala
+    </ion-button>
+  </div>
+
+  <!-- Tagline -->
+  <div class="tagline">
+    <ion-icon name="sparkles" class="sparkle-icon"></ion-icon>
+    Descubre al impostor entre tus amigos
+  </div>
+</ion-content>
+
+<!-- Formulario para crear sala -->
+<ion-content class="form-container" *ngIf="showCreateForm">
+  <div class="form-content">
+    <ion-header collapse="condense">
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="cancel()">
+            <ion-icon name="arrow-back"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-title>Crear Sala</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-card>
+      <ion-card-content>
+        <!-- Selector de avatar -->
+        <div class="avatar-section">
+          <p class="section-label">Elige tu avatar</p>
+          <div class="avatar-grid">
+            <div
+              *ngFor="let avatar of avatars"
+              class="avatar-option"
+              [class.selected]="selectedAvatar === avatar"
+              (click)="selectAvatar(avatar)"
+            >
+              <div class="avatar-circle">{{ avatar }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Input de nombre -->
+        <div class="input-section">
+          <p class="section-label">Tu nombre</p>
+          <ion-item>
+            <ion-input
+              [(ngModel)]="hostName"
+              placeholder="Ingresa tu nombre..."
+              [disabled]="isLoading"
+              class="custom-input"
+            ></ion-input>
+          </ion-item>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="button-group">
+          <ion-button expand="block" fill="outline" color="primary" (click)="cancel()">
+            Atrás
+          </ion-button>
+          <ion-button
+            expand="block"
+            color="primary"
+            (click)="createSala()"
+            [disabled]="isLoading || !hostName.trim()"
+            class="primary-btn"
+          >
+            <span *ngIf="!isLoading">Crear →</span>
+            <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+          </ion-button>
+        </div>
+
+        <ion-text color="danger" *ngIf="error">
+          <p class="error-message">{{ error }}</p>
+        </ion-text>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
+
+<!-- Formulario para unirse a sala -->
+<ion-content class="form-container" *ngIf="showJoinForm">
+  <div class="form-content">
+    <ion-header collapse="condense">
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-button (click)="cancel()">
+            <ion-icon name="arrow-back"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-title>Unirse a Sala</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-card>
+      <ion-card-content>
+        <!-- Selector de avatar -->
+        <div class="avatar-section">
+          <p class="section-label">Elige tu avatar</p>
+          <div class="avatar-grid">
+            <div
+              *ngFor="let avatar of avatars"
+              class="avatar-option"
+              [class.selected]="selectedAvatar === avatar"
+              (click)="selectAvatar(avatar)"
+            >
+              <div class="avatar-circle">{{ avatar }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inputs -->
+        <div class="input-section">
+          <p class="section-label">Tu nombre</p>
+          <ion-item>
+            <ion-input
+              [(ngModel)]="playerName"
+              placeholder="Ingresa tu nombre..."
+              [disabled]="isLoading"
+              class="custom-input"
+            ></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="input-section">
+          <p class="section-label">Código de sala</p>
+          <ion-item>
+            <ion-input
+              [(ngModel)]="joinCode"
+              placeholder="ABC123"
+              maxlength="6"
+              inputmode="text"
+              [disabled]="isLoading"
+              class="custom-input"
+            ></ion-input>
+          </ion-item>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="button-group">
+          <ion-button expand="block" fill="outline" color="primary" (click)="cancel()">
+            Atrás
+          </ion-button>
+          <ion-button
+            expand="block"
+            color="primary"
+            (click)="joinSala()"
+            [disabled]="isLoading || !playerName.trim() || !joinCode.trim()"
+            class="primary-btn"
+          >
+            <span *ngIf="!isLoading">Unirse →</span>
+            <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+          </ion-button>
+        </div>
+
+        <ion-text color="danger" *ngIf="error">
+          <p class="error-message">{{ error }}</p>
+        </ion-text>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

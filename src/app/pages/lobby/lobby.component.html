@@ -1,0 +1,79 @@
+<ion-content class="lobby-container" *ngIf="room">
+  <!-- Header con logo y titulo -->
+  <ion-header collapse="condense">
+    <ion-toolbar class="header-toolbar">
+      <ion-buttons slot="start">
+        <ion-button (click)="goHome()">
+          <ion-icon name="arrow-back"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <div class="lobby-content">
+    <!-- Logo y Titulo -->
+    <div class="header-section">
+      <img src="assets/icon/logo-impostor.svg" alt="Logo Impostor" class="logo-image" />
+      <h1 class="title">IMPOSTOR</h1>
+      <p class="subtitle">¿QUIÉN ES EL IMPOSTOR?</p>
+    </div>
+
+    <!-- Código de sala -->
+    <div class="code-section">
+      <p class="section-label">Código de sala</p>
+      <div class="code-box" (click)="copyRoomCode()">
+        <span class="code-text">{{ room.code }}</span>
+        <ion-icon name="copy" class="copy-icon"></ion-icon>
+      </div>
+      <p class="hint-text">Toca para copiar</p>
+    </div>
+
+    <!-- Lista de jugadores -->
+    <div class="players-section">
+      <p class="players-header">
+        <ion-icon name="people" slot="start"></ion-icon>
+        Jugadores ({{ playerCount }}/{{ room.maxPlayers }})
+      </p>
+
+      <div class="players-list">
+        <div class="player-item" *ngFor="let playerName of playerNames">
+          <div class="player-avatar">🎮</div>
+          <div class="player-info">
+            <span class="player-name">{{ playerName }}</span>
+            <span class="player-status">Esperando...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="waiting-status" *ngIf="playerCount < room.minPlayers">
+        <p>Esperando jugadores... (mínimo {{ room.minPlayers }})</p>
+      </div>
+    </div>
+
+    <!-- Footer con acción -->
+    <div class="footer-section">
+      <div *ngIf="isHost">
+        <ion-button
+          expand="block"
+          color="primary"
+          size="large"
+          (click)="startGame()"
+          [disabled]="isLoading || playerCount < room.minPlayers"
+          class="start-btn"
+        >
+          <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+          <span *ngIf="!isLoading">Iniciar Juego</span>
+        </ion-button>
+      </div>
+
+      <div *ngIf="!isHost" class="waiting-host">
+        <ion-icon name="crown"></ion-icon>
+        Esperando que el anfitrión inicie...
+      </div>
+
+      <ion-text color="danger" *ngIf="error">
+        <p class="error-message">{{ error }}</p>
+      </ion-text>
+    </div>
+  </div>
+</ion-content>

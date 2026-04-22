@@ -1,0 +1,7 @@
+{
+  "name": "juego_impostor",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

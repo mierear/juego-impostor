@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar class="header-toolbar">
+    <ion-buttons slot="start">
+      <ion-button (click)="goHome()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <span class="turn-display">Turno {{ currentTurnNumber }}/{{ totalTurns }}</span>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="clues-container" *ngIf="room && currentPlayer">
+  <div class="clues-content">
+    <!-- Current Turn Player Info -->
+    <div class="turn-info-section">
+      <h2 class="section-title">Turno del Jugador</h2>
+      <div class="current-player-card" *ngIf="currentTurnPlayer">
+        <div class="player-avatar">🎮</div>
+        <h3 class="player-name">{{ currentTurnPlayer.name }}</h3>
+        <p class="player-role" *ngIf="isCurrentPlayerTurn">Es tu turno</p>
+        <p class="player-role" *ngIf="!isCurrentPlayerTurn">Esperando su pista...</p>
+      </div>
+    </div>
+
+    <!-- Clue Input Section (if player's turn) -->
+    <div class="clue-input-section" *ngIf="isCurrentPlayerTurn">
+      <h3 class="section-title">Entrega tu Pista</h3>
+      <p class="instruction">Una palabra o frase corta que le ayude a otros a identificar quién eres (sin decir el nombre del personaje).</p>
+
+      <ion-item class="input-item">
+        <ion-input
+          [(ngModel)]="clueInput"
+          placeholder="Ej: Verde, Famoso, Rápido..."
+          maxlength="50"
+          [disabled]="isLoading"
+        ></ion-input>
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        (click)="submitClue()"
+        [disabled]="!clueInput.trim() || isLoading"
+        class="submit-btn"
+      >
+        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+        <span *ngIf="!isLoading">Enviar Pista</span>
+      </ion-button>
+
+      <ion-text color="danger" *ngIf="error">
+        <p class="error-message">{{ error }}</p>
+      </ion-text>
+    </div>
+
+    <!-- Waiting Section (if not player's turn) -->
+    <div class="waiting-section" *ngIf="!isCurrentPlayerTurn">
+      <ion-spinner name="dots"></ion-spinner>
+      <p class="waiting-text">Esperando la pista de {{ currentTurnPlayer?.name }}...</p>
+    </div>
+
+    <!-- Previous Clues List -->
+    <div class="clues-history-section">
+      <h3 class="section-title">Pistas Dadas</h3>
+      <div class="clues-list">
+        <div class="clue-item" *ngFor="let item of playerClues">
+          <div class="clue-header">
+            <span class="turn-badge">Turno {{ item.turnNumber }}</span>
+            <span class="player-name">{{ item.player.name }}</span>
+          </div>
+          <div class="clue-content">
+            <p *ngIf="item.player.clue" class="clue-text">{{ item.player.clue }}</p>
+            <p *ngIf="!item.player.clue" class="clue-pending">Pendiente...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

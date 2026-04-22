@@ -1,0 +1,150 @@
+<ion-header>
+  <ion-toolbar class="header-toolbar">
+    <ion-buttons slot="start">
+      <ion-button (click)="goHome()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <span class="voting-title">VOTACIÓN</span>
+    <span class="timer" [class.expired]="votingTimeRemaining <= 0">
+      {{ votingTimeRemaining }}s
+    </span>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="voting-container" *ngIf="room && !showResults">
+  <div class="voting-content">
+    <!-- Header -->
+    <div class="voting-header">
+      <h1 class="title">¿QUIÉN ES?</h1>
+      <p class="subtitle">El Impostor</p>
+    </div>
+
+    <!-- Timer Warning -->
+    <div class="timer-warning" *ngIf="votingTimeRemaining <= 5 && votingTimeRemaining > 0">
+      <ion-icon name="alert-circle"></ion-icon>
+      <p>¡Se está acabando el tiempo!</p>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-section">
+      <div class="progress-info">
+        <span class="label">Votando</span>
+        <span class="count">{{ getVotingProgress() }}% ({{ getVotedPlayersCount() }}/{{ getTotalPlayers() }})</span>
+      </div>
+      <ion-progress-bar
+        [value]="getVotingProgress() / 100"
+        class="progress-bar"
+      ></ion-progress-bar>
+    </div>
+
+    <!-- Instruction -->
+    <div class="instruction-section">
+      <div class="instruction-card" [class.voted]="hasVoted">
+        <p class="instruction-text" *ngIf="!hasVoted">
+          Elige a quién crees que es el impostor
+        </p>
+        <p class="instruction-text voted" *ngIf="hasVoted">
+          ✓ Tu voto ha sido registrado
+        </p>
+      </div>
+    </div>
+
+    <!-- Players Grid for Voting -->
+    <div class="players-grid">
+      <div
+        *ngFor="let player of otherPlayers"
+        class="player-card"
+        [class.selected]="selectedVoteId === player.id"
+        [class.disabled]="hasVoted || votingExpired"
+        (click)="selectVote(player.id)"
+      >
+        <div class="player-avatar">
+          🎮
+        </div>
+        <p class="player-name">{{ player.name }}</p>
+        <div class="vote-badge" *ngIf="getVoteCount(player.id) > 0">
+          <span class="vote-count">{{ getVoteCount(player.id) }}</span>
+          <span class="vote-label">{{ getVoteCount(player.id) === 1 ? 'voto' : 'votos' }}</span>
+        </div>
+        <ion-icon name="checkmark-circle" class="checkmark" *ngIf="selectedVoteId === player.id"></ion-icon>
+      </div>
+    </div>
+
+    <!-- Vote Button -->
+    <div class="actions-section">
+      <ion-button
+        expand="block"
+        (click)="submitVote()"
+        [disabled]="!selectedVoteId || hasVoted || isLoading || votingExpired"
+        class="submit-btn"
+      >
+        <ion-spinner *ngIf="isLoading" name="crescent"></ion-spinner>
+        <span *ngIf="!isLoading">Confirmar Voto</span>
+      </ion-button>
+
+      <!-- Error Message -->
+      <ion-text *ngIf="error">
+        <p class="error-message">{{ error }}</p>
+      </ion-text>
+
+      <!-- Expired Message -->
+      <ion-text *ngIf="votingExpired && !showResults" color="warning">
+        <p class="warning-message">Se acabó el tiempo de votación. Mostrando resultados...</p>
+      </ion-text>
+    </div>
+  </div>
+</ion-content>
+
+<!-- Results Screen -->
+<ion-content class="results-container" *ngIf="votingResult && showResults">
+  <div class="results-content">
+    <!-- Header -->
+    <div class="results-header">
+      <h1 class="title">RESULTADOS</h1>
+    </div>
+
+    <!-- Voted Out Player -->
+    <div class="voted-section">
+      <p class="section-label">Jugador Eliminado</p>
+      <div class="voted-player-card">
+        <div class="avatar-large">🎮</div>
+        <h2 class="player-name">{{ votingResult.votedOutPlayer.name }}</h2>
+      </div>
+    </div>
+
+    <!-- Result Status -->
+    <div class="status-section" [ngClass]="{ success: votingResult.wasImpostor, failure: !votingResult.wasImpostor }">
+      <div class="status-icon" *ngIf="votingResult.wasImpostor">🎉</div>
+      <div class="status-icon" *ngIf="!votingResult.wasImpostor">😅</div>
+      <h3 class="status-text">
+        {{ votingResult.wasImpostor ? '¡ERA EL IMPOSTOR!' : 'No era el Impostor' }}
+      </h3>
+    </div>
+
+    <!-- Vote Details -->
+    <div class="votes-details">
+      <p class="section-label">Detalles de Votos</p>
+      <div class="votes-list">
+        <div class="vote-item" *ngFor="let vote of votingResult.playerVotes">
+          <span class="voter-name">{{ getPlayerName(vote.voterId) }}</span>
+          <ion-icon name="arrow-forward" class="arrow"></ion-icon>
+          <span class="voted-for-name">{{ getPlayerName(vote.votedFor) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="final-actions">
+      <ion-button expand="block" (click)="playAgain()" class="primary-btn">
+        <ion-icon name="refresh" slot="start"></ion-icon>
+        Jugar Otra Ronda
+      </ion-button>
+      <ion-button expand="block" (click)="goHome()" class="secondary-btn">
+        <ion-icon name="home" slot="start"></ion-icon>
+        Volver a Inicio
+      </ion-button>
+    </div>
+  </div>
+</ion-content>
+

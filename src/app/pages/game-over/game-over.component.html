@@ -1,0 +1,95 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Juego Finalizado</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="room" [class]="'game-over-container ' + resultClass">
+    <!-- Logo -->
+    <div class="logo-section">
+      <img src="assets/icon/logo-impostor.svg" alt="Logo Impostor" class="game-over-logo" />
+    </div>
+
+    <!-- Título del Resultado -->
+    <div class="result-section">
+      <h1 class="result-title">{{ resultTitle }}</h1>
+      <p class="result-subtitle">
+        {{ currentPlayerWon ? 'Felicidades, lo lograste' : 'El impostor ganó esta ronda' }}
+      </p>
+    </div>
+
+    <!-- Información del Impostor -->
+    <ion-card *ngIf="impostor" class="impostor-card">
+      <ion-card-header>
+        <ion-card-title>El Impostor Era:</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="impostor-info">
+          <h2>{{ impostor.name }}</h2>
+          <p class="role-badge" *ngIf="impostor.role === 'impostor'">IMPOSTOR</p>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Personaje (si no era impostor el ganador) -->
+    <ion-card *ngIf="winnerRole === 'character' && impostor">
+      <ion-card-header>
+        <ion-card-title>El Personaje Oculto Era:</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="character-info">
+          <h2>{{ impostor.character?.name || 'Desconocido' }}</h2>
+          <img *ngIf="impostor.character?.image" [src]="impostor.character?.image" alt="Personaje" />
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Estadísticas -->
+    <ion-card class="stats-card">
+      <ion-card-header>
+        <ion-card-title>Estadísticas de la Ronda</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="stat-row">
+          <span>Ronda:</span>
+          <strong>{{ room.roundNumber || 1 }}</strong>
+        </div>
+        <div class="stat-row">
+          <span>Ganador:</span>
+          <strong>{{ winnerRole === 'character' ? 'Personajes' : 'Impostor' }}</strong>
+        </div>
+        <div class="stat-row">
+          <span>Jugadores activos:</span>
+          <strong>{{ getActivePlayers() }}</strong>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Acciones -->
+    <ion-button
+      expand="block"
+      color="primary"
+      size="large"
+      (click)="restartGame()"
+      class="action-button"
+    >
+      <ion-icon name="refresh-circle"></ion-icon>
+      Volver a Jugar
+    </ion-button>
+
+    <ion-button
+      expand="block"
+      color="secondary"
+      size="large"
+      (click)="goHome()"
+      class="action-button"
+    >
+      <ion-icon name="home"></ion-icon>
+      Volver a Inicio
+    </ion-button>
+  </div>
+</ion-content>
