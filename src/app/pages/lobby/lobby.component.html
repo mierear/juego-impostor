@@ -36,10 +36,13 @@
       </p>
 
       <div class="players-list">
-        <div class="player-item" *ngFor="let playerName of playerNames">
-          <div class="player-avatar">🎮</div>
+        <div class="player-item" *ngFor="let player of players">
+          <div class="player-avatar">
+            <img *ngIf="player.character?.image" [src]="player.character.image" [alt]="player.name" class="avatar-image" />
+            <span *ngIf="!player.character?.image" class="avatar-placeholder">🎮</span>
+          </div>
           <div class="player-info">
-            <span class="player-name">{{ playerName }}</span>
+            <span class="player-name">{{ player.name }}</span>
             <span class="player-status">Esperando...</span>
           </div>
         </div>

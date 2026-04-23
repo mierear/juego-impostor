@@ -114,6 +114,14 @@ export class LobbyComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Obtener lista completa de jugadores
+   */
+  get players(): any[] {
+    if (!this.room) return [];
+    return Object.values(this.room.players);
+  }
+
+  /**
    * Obtener lista de nombres de jugadores
    */
   get playerNames(): string[] {
