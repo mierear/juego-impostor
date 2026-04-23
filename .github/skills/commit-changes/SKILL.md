@@ -2,6 +2,8 @@
 name: commit-changes
 description: >
   Aplica commit a los cambios pendientes.
+agent: agent
+model: GPT-4.o
 ---
 
 # Habilidad para confirmar cambios
